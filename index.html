@@ -411,7 +411,7 @@
         </div>
     </div>
 
-    <!-- Custom Toast Notification -->
+
     <div id="toast" class="fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3 transition-all duration-300 translate-y-20 opacity-0 pointer-events-none">
         <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
         <span id="toastMsg" class="text-xs font-semibold">Pesan Notifikasi</span>
@@ -426,12 +426,9 @@
     </footer>
 
     <script>
-        // Configuration state
         const DEFAULT_PUBLISHED_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuf94poDOMkF1jyX1omfA2NKjqgJ9yOLks1WmT8MpjTzVNytSN9D8XlmzrkC1SO5Nss1OjwQGG951g/pub?gid=523356163&single=true&output=csv";
         const DEFAULT_SPREADSHEET_ID = "1Iv6HcoKA04ujgwXLzm2GIUUcFSo0IFgA-kaTJQsn1g";
         const DEFAULT_SHEET_GID = "523356163";
-
-        // Fallback sample data in case sheet is not published
         const SAMPLE_DATA = [
             {
                 "Timestamp": "10/19/2026 11:46:18",
@@ -451,7 +448,7 @@
             participants: [],
             filteredParticipants: [],
             lastFetchTime: null,
-            viewMode: 'table' // 'table' or 'cards'
+            viewMode: 'table' 
         };
 
         async function fetchSpreadsheetData() {
@@ -796,12 +793,25 @@
             }
         }
 
-        function openSettingsModal() {
-            document.getElementById('settingSheetUrl').value = appState.publishedUrl;
-            document.getElementById('settingSheetId').value = appState.spreadsheetId;
-            document.getElementById('settingSheetGid').value = appState.sheetGid;
+       function openSettingsModal() {
+           
+            const inputToken = prompt("Tanya Mamas Ganteng");
 
-            // Auto parse when user pastes URL in settings
+           
+            if (inputToken === null) return;
+
+      
+            if (inputToken !== TOKEN_PANITIA) {
+                alert("⚠️ Token akses salah! Anda tidak memiliki izin untuk mengubah Pengaturan.");
+                return; 
+            }
+
+          
+            document.getElementById('settingSheetUrl').value = appState.publishedUrl || '';
+            document.getElementById('settingSheetId').value = appState.spreadsheetId || '';
+            document.getElementById('settingSheetGid').value = appState.sheetGid || '';
+
+           
             document.getElementById('settingSheetUrl').oninput = function(e) {
                 const val = e.target.value.trim();
                 if (val.includes('/pub?')) {
@@ -818,6 +828,7 @@
                 }
             };
 
+            
             document.getElementById('settingsModal').classList.remove('hidden');
         }
 
@@ -853,7 +864,7 @@
             openSettingsModal();
             showToast("Kembali ke konfigurasi awal.");
         }
-
+        const TOKEN_PANITIA = "PGRIBUK@TEJA123";
         function updateSyncStatus(status, text) {
             const badge = document.getElementById('syncBadge');
             const statusText = document.getElementById('syncStatusText');
@@ -895,11 +906,44 @@
         window.onload = function() {
             fetchSpreadsheetData();
 
-            // Auto refresh every 30 seconds
+            
             appState.autoRefreshTimer = setInterval(() => {
                 fetchSpreadsheetData();
             }, 30000);
         };
+
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                alert("⚠️ Fitur klik kanan dinonaktifkan demi keamanan sistem.");
+            });
+
+
+            document.addEventListener('keydown', function(e) {
+
+                if (e.key === 'F12' || e.keyCode === 123) {
+                    e.preventDefault();
+                    return false;
+                }
+
+
+                if (e.ctrlKey && e.shiftKey && (
+                    e.key === 'I' || e.key === 'i' || 
+                    e.key === 'J' || e.key === 'j' || 
+                    e.key === 'C' || e.key === 'c'
+                )) {
+                    e.preventDefault();
+                    return false;
+                }
+
+
+                if (e.ctrlKey && (
+                    e.key === 'u' || e.key === 'U' || 
+                    e.key === 's' || e.key === 'S'
+                )) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
     </script>
 </body>
 </html>
